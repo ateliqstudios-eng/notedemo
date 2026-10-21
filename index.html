@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nōte | Your life has notes. We turn them into scent.</title>
+<meta name="description" content="Nōte is a personalised scent-design house. Fragrance built around who you are, who you love and what you remember.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== Design system ===== */
+:root{
+  --cream:#FBF7EE; --ivory:#F4ECDB; --sand:#E9DDC4;
+  --gold:#B08A3E; --gold-lt:#D8BC7A; --gold-dk:#8A6A2B;
+  --ink:#2B2218; --muted:#75684F;
+  --f-display:'Cormorant Garamond',Georgia,serif;
+  --f-body:'Jost','Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --pad:clamp(20px,6vw,88px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--f-body);font-weight:300;font-size:1.0625rem;line-height:1.75;overflow-x:hidden}
+body.locked{overflow:hidden;height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+h1,h2,h3{font-family:var(--f-display);font-weight:300;line-height:1.08;letter-spacing:-.01em}
+h2{font-size:clamp(2.3rem,5.2vw,4rem)}
+.gold-italic{font-style:italic;color:var(--gold)}
+main,footer,nav{position:relative;z-index:2}
+section{padding:clamp(72px,11vw,150px) var(--pad)}
+.wrap{max-width:1160px;margin:0 auto}
+.lead{max-width:34rem;color:var(--muted);margin-top:1.5rem}
+.rule{width:56px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:2rem 0}
+.btn{display:inline-block;padding:1rem 2.4rem;border:1px solid var(--gold);color:var(--gold-dk);letter-spacing:.14em;font-size:.82rem;font-weight:400;transition:background .4s var(--ease),color .4s var(--ease),transform .4s var(--ease)}
+.btn:hover{background:var(--gold);color:var(--cream);transform:translateY(-2px)}
+.btn.solid{background:var(--gold);color:var(--cream)}
+.btn.solid:hover{background:var(--gold-dk)}
+
+/* ===== Entry gate: the signature moment ===== */
+#gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;text-align:center;overflow:hidden}
+#gate .half{position:absolute;left:0;right:0;height:50%;background:radial-gradient(ellipse 55% 60% at 50% 50%,rgba(216,188,122,.4),transparent 72%),radial-gradient(ellipse 120% 100% at 50% 50%,transparent 55%,rgba(176,138,62,.18)),var(--cream);background-size:100% 200%,100% 200%,auto;transition:transform 1.6s var(--ease);z-index:1}
+#gate .top{top:0;background-position:0 0,0 0,0 0}#gate .bot{bottom:0;background-position:0 100%,0 100%,0 0}
+#gate .seam{position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-lt),transparent);z-index:3;transform:scaleX(0);animation:seam 2s .3s var(--ease) forwards;transition:opacity .6s}
+#gate.open .top{transform:translateY(-101%)}
+#gate.open .bot{transform:translateY(101%)}
+#gate.open .gate-in,#gate.open .seam,#gate.open .frame{opacity:0;pointer-events:none}
+#gate.gone{display:none}
+.gate-in{position:relative;z-index:4;padding:24px;transition:opacity .5s}
+.frame{position:absolute;inset:16px;border:1px solid rgba(176,138,62,.45);z-index:3;pointer-events:none;transition:opacity .6s}
+.frame::before{content:"";position:absolute;inset:7px;border:1px solid rgba(216,188,122,.5)}
+.corner{position:absolute;width:56px;height:56px;fill:none;stroke:var(--gold);stroke-width:1}
+.corner path{stroke-dasharray:200;stroke-dashoffset:200;animation:draw 2s .4s var(--ease) forwards}
+.corner circle{fill:var(--gold);stroke:none}
+.c1{top:-1px;left:-1px}.c2{top:-1px;right:-1px;transform:scaleX(-1)}.c3{bottom:-1px;left:-1px;transform:scaleY(-1)}.c4{bottom:-1px;right:-1px;transform:scale(-1)}
+.emblem{position:relative;width:min(320px,70vw,34vh);aspect-ratio:1;margin:0 auto .8rem;display:grid;place-items:center;opacity:0;animation:fade 1.4s .1s forwards}
+.ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 80s linear infinite}
+.ring text{font-family:var(--f-display);font-style:italic;font-size:15px;letter-spacing:.14em;fill:var(--gold-dk)}
+.ring circle{fill:none;stroke:var(--gold-lt);stroke-width:.6}
+.bottle{width:34%;height:auto;position:relative}
+.bottle .out{fill:none;stroke:var(--gold-dk);stroke-width:1.6;stroke-dasharray:600;stroke-dashoffset:600;animation:draw 2.4s .3s var(--ease) forwards}
+.bottle .cap{fill:var(--gold);opacity:0;animation:fade 1s 1.8s forwards}
+.bottle .liq{animation:fill 3s 1s var(--ease) both}
+.bottle .shine{fill:none;stroke:#fff;stroke-width:2;opacity:.55}
+@keyframes fill{from{transform:translateY(140px)}to{transform:translateY(0)}}
+.gate-cycle{height:1.9em;font-family:var(--f-display);font-style:italic;font-size:1.25rem;color:var(--gold-dk);margin-bottom:1.6rem;opacity:0;animation:fade 1.6s 2.1s forwards}
+.gate-cycle span{display:inline-block;transition:opacity .8s}
+.gate-name{font-family:var(--f-display);font-size:clamp(3rem,8vw,5rem);font-weight:300;letter-spacing:.06em;opacity:0;animation:fade 1.6s 1.4s forwards}
+.gate-tag{font-style:italic;font-family:var(--f-display);font-size:1.3rem;color:var(--muted);margin:.2rem 0 .6rem;opacity:0;animation:fade 1.6s 1.9s forwards}
+#enter{opacity:0;animation:fade 1.6s 2.4s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@keyframes seam{to{transform:scaleX(1)}}
+.motes{position:absolute;inset:0;z-index:2;pointer-events:none}
+.motes .w{position:absolute;bottom:-30px;white-space:nowrap;font-family:var(--f-display);font-style:italic;font-size:1.15rem;color:var(--gold-dk);opacity:0;animation:wrise linear infinite}
+@keyframes wrise{0%{opacity:0;transform:translateY(0)}20%{opacity:.4}80%{opacity:.4}100%{opacity:0;transform:translateY(-105vh)}}
+.motes i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:var(--gold-lt);opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{opacity:0;transform:translateY(0)}15%{opacity:.8}100%{opacity:0;transform:translateY(-105vh) translateX(30px)}}
+
+/* ===== Nav ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px var(--pad);transition:background .4s,padding .4s}
+nav.solid{background:rgba(251,247,238,.92);backdrop-filter:blur(10px);padding-block:12px;border-bottom:1px solid var(--sand)}
+.logo{font-family:var(--f-display);font-size:1.9rem;letter-spacing:.06em}
+nav ul{display:flex;gap:2.2rem;list-style:none;font-size:.88rem;letter-spacing:.06em}
+nav ul a{position:relative;padding:.4rem 0}
+nav ul a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .4s var(--ease)}
+nav ul a:hover::after{width:100%}
+.nav-cta{font-size:.82rem;letter-spacing:.1em;border-bottom:1px solid var(--gold);padding-bottom:2px;color:var(--gold-dk)}
+
+/* ===== Hero ===== */
+.hero{position:relative;min-height:100vh;display:grid;align-items:center;padding-top:120px;background:radial-gradient(ellipse 60% 55% at 78% 45%,rgba(216,188,122,.28),transparent 70%),var(--cream)}
+.hero h1{font-size:clamp(3rem,8.4vw,7rem)}
+.hero p{max-width:30rem;margin:2rem 0 2.6rem;color:var(--muted);font-size:1.15rem}
+.hero .wrap{position:relative}
+.hero svg.orb{position:absolute;right:-2%;top:50%;transform:translateY(-50%);width:min(44vw,520px);opacity:.9;pointer-events:none}
+.orb circle,.orb ellipse{fill:none;stroke:var(--gold-lt);stroke-width:.6}
+.orb .spin{transform-origin:center;animation:spin 90s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb path,.orb rect{fill:none;stroke:var(--gold);stroke-width:.9}
+.orb .liq{fill:rgba(216,188,122,.4);stroke:none}
+.orb .cap{fill:var(--gold-lt);stroke:none}
+.cue{position:absolute;left:50%;bottom:28px;width:1px;height:64px;background:linear-gradient(var(--gold),transparent);transform-origin:top;animation:cue 2.4s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* ===== Who for ===== */
+.who{background:var(--ivory);text-align:center}
+.who .lead{margin-inline:auto}
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:4rem;border-top:1px solid var(--gold-lt);border-bottom:1px solid var(--gold-lt)}
+.path{padding:3rem 1.5rem;transition:background .5s var(--ease);border-left:1px solid var(--sand);text-align:center}
+.path:first-child{border-left:0}
+.path h3{font-size:2.6rem;margin-bottom:.4rem}
+.path span{display:block;color:var(--muted);font-size:.95rem;max-width:15rem;margin-inline:auto}
+.path:hover,.path.on{background:var(--cream)}
+.path.on h3{color:var(--gold)}
+#pathMsg{margin-top:2rem;min-height:3.2rem;font-family:var(--f-display);font-style:italic;font-size:1.35rem;color:var(--gold-dk)}
+
+/* ===== Story ===== */
+.story .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,7vw,110px);align-items:center}
+.story .big{font-family:var(--f-display);font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.3;font-weight:300}
+.story .big div{padding:.5rem 0;border-bottom:1px solid var(--sand)}
+.story .big div:last-child{border:0;color:var(--gold)}
+.story p+p{margin-top:1.2rem}
+.story p{color:var(--muted)}
+
+/* ===== Ecosystem ===== */
+.eco{background:var(--ink);color:var(--cream)}
+.eco .lead{color:#b9ab8e}
+.eco .gold-italic{color:var(--gold-lt)}
+.rows{margin-top:3.5rem;border-top:1px solid rgba(216,188,122,.3)}
+.row{display:grid;grid-template-columns:1fr 1.4fr;gap:2rem;padding:2rem 0;border-bottom:1px solid rgba(216,188,122,.3);align-items:baseline;transition:padding .5s var(--ease)}
+.row h3{font-size:clamp(1.9rem,3.4vw,2.8rem);transition:color .4s,transform .5s var(--ease)}
+.row p{color:#b9ab8e;max-width:36rem}
+.row:hover h3{color:var(--gold-lt);transform:translateX(10px)}
+.row small{display:block;margin-top:.5rem;font-size:.8rem;letter-spacing:.06em;color:var(--gold-lt)}
+.after{margin-top:3.5rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;font-family:var(--f-display);font-size:1.4rem}
+.after b{font-weight:400;color:var(--gold-lt);font-style:italic;margin-right:.6rem}
+.after span{border:1px solid rgba(216,188,122,.45);padding:.2rem 1rem;font-size:1.05rem;font-family:var(--f-body);font-weight:300}
+
+/* ===== Discovery ===== */
+.disc{text-align:center}
+.disc .lead{margin-inline:auto}
+.vials{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,4vw,56px);margin-top:4rem}
+.vial svg{width:100%;max-width:140px;height:auto;display:block;margin:0 auto 1.2rem;transition:transform .7s var(--ease)}
+.vial:hover svg{transform:translateY(-10px) rotate(-2deg)}
+.vial h3{font-size:2.2rem}
+.vial em{display:block;font-family:var(--f-display);font-size:1.25rem;color:var(--gold-dk);margin:.2rem 0 .6rem}
+.vial p{color:var(--muted);font-size:.95rem;max-width:16rem;margin-inline:auto}
+.steps{max-width:620px;margin:5rem auto 0;text-align:left;border-top:1px solid var(--gold-lt)}
+.steps li{list-style:none;display:grid;grid-template-columns:2.4rem 1fr;padding:1rem 0;border-bottom:1px solid var(--sand)}
+.steps li span{font-family:var(--f-display);font-size:1.5rem;color:var(--gold)}
+.product{margin-top:5rem;padding:clamp(32px,5vw,64px);background:var(--ivory);display:grid;grid-template-columns:1fr 1fr;gap:2rem;text-align:left;align-items:center}
+.product h3{font-size:clamp(2rem,3.6vw,3rem)}
+.product p{color:var(--muted);margin-top:.8rem}
+
+/* ===== Closing ===== */
+.close{background:radial-gradient(ellipse 70% 80% at 50% 100%,rgba(216,188,122,.35),transparent 70%),var(--ivory);text-align:center}
+.close h2{max-width:16ch;margin-inline:auto}
+.wait{display:flex;max-width:480px;margin:2.6rem auto 0;border-bottom:1px solid var(--gold)}
+.wait input{flex:1;background:none;border:0;padding:1rem .4rem;font:inherit;color:var(--ink);min-width:0}
+.wait input:focus{outline:none}
+.wait button{color:var(--gold-dk);letter-spacing:.12em;font-size:.82rem;padding:0 .4rem}
+#waitMsg{min-height:1.6rem;margin-top:1rem;font-style:italic;font-family:var(--f-display);font-size:1.2rem;color:var(--gold-dk)}
+footer{padding:2.4rem var(--pad);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--sand);background:var(--cream)}
+
+/* ===== Reveal (used once per section heading only) ===== */
+.rv{opacity:0;transform:translateY(24px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* ===== Responsive ===== */
+@media(max-width:820px){
+  nav ul{display:none}
+  .hero svg.orb{opacity:.35;width:90vw;right:-30%}
+  .paths,.vials{grid-template-columns:1fr}
+  .path{border-left:0;border-top:1px solid var(--sand)}.path:first-child{border-top:0}
+  .story .wrap,.row,.product{grid-template-columns:1fr}
+  .row{gap:.6rem}
+  .vials{gap:3rem}
+  .btn{width:100%;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+  .bottle .out,.corner path{stroke-dashoffset:0}.emblem,.bottle .cap,.gate-cycle,.gate-name,.gate-tag,#enter{opacity:1}.ring,.cue{animation:none}
+  .motes{display:none}.rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- Entry -->
+<div id="gate" role="dialog" aria-label="Enter Nōte">
+  <div class="half top"></div><div class="half bot"></div><div class="seam"></div>
+  <div class="frame" aria-hidden="true"><svg class="corner c1" viewBox="0 0 56 56"><path d="M1 54V14Q1 1 14 1H54"/><path d="M9 54V20Q9 9 20 9H54" opacity=".5"/><circle cx="16" cy="16" r="2"/></svg><svg class="corner c2" viewBox="0 0 56 56"><path d="M1 54V14Q1 1 14 1H54"/><path d="M9 54V20Q9 9 20 9H54" opacity=".5"/><circle cx="16" cy="16" r="2"/></svg><svg class="corner c3" viewBox="0 0 56 56"><path d="M1 54V14Q1 1 14 1H54"/><path d="M9 54V20Q9 9 20 9H54" opacity=".5"/><circle cx="16" cy="16" r="2"/></svg><svg class="corner c4" viewBox="0 0 56 56"><path d="M1 54V14Q1 1 14 1H54"/><path d="M9 54V20Q9 9 20 9H54" opacity=".5"/><circle cx="16" cy="16" r="2"/></svg></div>
+  <div class="motes" id="motes" aria-hidden="true"></div>
+  <div class="gate-in">
+    <div class="emblem" aria-hidden="true">
+      <svg class="ring" viewBox="0 0 300 300"><defs><path id="rp" d="M150 150m-118 0a118 118 0 1 1 236 0a118 118 0 1 1-236 0"/></defs><circle cx="150" cy="150" r="144"/><circle cx="150" cy="150" r="96"/><text><textPath href="#rp" textLength="735" lengthAdjust="spacing">identity ✦ memory ✦ mood ✦ relationships ✦ spaces ✦ </textPath></text></svg>
+      <svg class="bottle" viewBox="0 0 120 200"><defs><clipPath id="bc"><path d="M26 72Q26 58 40 58H80Q94 58 94 72V168Q94 184 78 184H42Q26 184 26 168Z"/></clipPath><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6CE92"/><stop offset="1" stop-color="#B08A3E"/></linearGradient></defs><g clip-path="url(#bc)"><rect class="liq" x="20" y="64" width="80" height="130" fill="url(#lg)"/></g><path class="out" d="M26 72Q26 58 40 58H80Q94 58 94 72V168Q94 184 78 184H42Q26 184 26 168ZM52 58V44H68V58"/><rect class="cap" x="46" y="12" width="28" height="32"/><path class="shine" d="M34 76V150"/></svg>
+    </div>
+    <div class="gate-name">Nōte</div>
+    <p class="gate-tag">Your life has notes.</p>
+    <p class="gate-cycle" aria-hidden="true"><span id="cycle"></span></p>
+    <button class="btn" id="enter">Enter Nōte</button>
+  </div>
+</div>
+
+<nav id="nav">
+  <a href="#top" class="logo" aria-label="Nōte home">Nōte</a>
+  <ul>
+    <li><a href="#story">The idea</a></li>
+    <li><a href="#world">The world of Nōte</a></li>
+    <li><a href="#discovery">Discovery</a></li>
+  </ul>
+  <a href="#begin" class="nav-cta">Begin</a>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <svg class="orb" viewBox="0 0 400 400" aria-hidden="true">
+        <g class="spin"><circle cx="200" cy="200" r="190"/><ellipse cx="200" cy="200" rx="190" ry="110"/><ellipse cx="200" cy="200" rx="110" ry="190"/><circle cx="200" cy="200" r="130"/></g>
+        <circle cx="200" cy="200" r="86"/>
+        <rect class="cap" x="186" y="112" width="28" height="26"/><path d="M192 138V150M160 172Q160 150 180 150H220Q240 150 240 172V262Q240 282 220 282H180Q160 282 160 262Z"/><path class="liq" d="M162 206H238V262Q238 280 220 280H180Q162 280 162 262Z"/>
+      </svg>
+      <h1>Your life<br>has notes.<br><span class="gold-italic">We turn them<br>into scent.</span></h1>
+      <p>A fragrance made from who you are, who you love and what you remember. Not picked from a shelf. Written for you.</p>
+      <a href="#begin" class="btn solid">Begin your scent journey</a>
+    </div>
+    <div class="cue" aria-hidden="true"></div>
+  </section>
+
+  <section class="who" id="begin">
+    <div class="wrap">
+      <h2 class="rv">Who are we creating for?</h2>
+      <p class="lead rv">Every Nōte starts with a person. Choose where yours begins.</p>
+      <div class="paths" role="group" aria-label="Who are we creating for">
+        <button class="path" data-m="A scent portrait of you. Identity, memory and mood, written down as fragrance."><h3>Me</h3><span>A fragrance that sounds like you.</span></button>
+        <button class="path" data-m="A scent portrait of someone you love, drawn from how you see them."><h3>Someone else</h3><span>A portrait of them, as you see them.</span></button>
+        <button class="path" data-m="One fragrance for two people. You each answer separately, then we meet in the middle."><h3>Us</h3><span>A shared scent for a shared story.</span></button>
+      </div>
+      <p id="pathMsg" aria-live="polite">Choose one to continue.</p>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="wrap">
+      <div class="big rv">
+        <div>A perfume holds notes.</div>
+        <div>Music is made of notes.</div>
+        <div>People write notes to remember.</div>
+        <div>Every memory leaves a Nōte.</div>
+      </div>
+      <div class="rv">
+        <h2 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:1.6rem">Technology is the mechanism. The feeling is the product.</h2>
+        <p>You will not be handed a configurator. You will be asked where you feel most yourself, which place you would keep, whether you are a morning or a midnight person.</p>
+        <p>Behind the quiet questions sits a carefully built library of fragrance accords, guided by a perfumer, kept safe and balanced. You get a scent that feels personal. We handle the chemistry.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="eco" id="world">
+    <div class="wrap">
+      <h2 class="rv">One scent identity,<br><span class="gold-italic">across your whole life.</span></h2>
+      <p class="lead rv">Perfume is where Nōte begins. Your scent profile is saved permanently and grows with you.</p>
+      <div class="rows">
+        <div class="row"><h3>Nōte Personal</h3><p>A fragrance for yourself, shaped by identity, memory, mood and the notes you love.</p></div>
+        <div class="row"><h3>Nōte Together</h3><p>A scent for a relationship: an anniversary, an engagement, a wedding. Each partner answers alone, then shares the memories that belong to both.</p></div>
+        <div class="row"><h3>Nōte Home</h3><p>Candles, room sprays, diffusers and linen sprays, all in the same scent identity as your perfume.<small>Coming after the first bottle</small></p></div>
+        <div class="row"><h3>Nōte Moments</h3><p>A graduation, a honeymoon, a childhood home, a city. Scent for the days worth keeping.</p></div>
+        <div class="row"><h3>Nōte Gift</h3><p>Create a Nōte for someone: a scent portrait of how you see them, with a note from you.</p></div>
+      </div>
+      <div class="after" aria-label="Example: After Rain"><b>Nōte After Rain</b><span>perfume</span><span>candle</span><span>diffuser</span><span>room spray</span><span>linen spray</span></div>
+    </div>
+  </section>
+
+  <section class="disc" id="discovery">
+    <div class="wrap">
+      <h2 class="rv">Nōte Discovery</h2>
+      <p class="lead rv">Nobody can smell through a screen. So you receive three interpretations of your profile, wear them, and choose the one that is yours.</p>
+      <div class="vials">
+        <div class="vial">
+          <svg viewBox="0 0 120 200" aria-hidden="true"><rect x="44" y="6" width="32" height="26" fill="#B08A3E"/><rect x="38" y="32" width="44" height="10" fill="#8A6A2B"/><path d="M26 56 Q26 42 40 42 H80 Q94 42 94 56 V176 Q94 192 78 192 H42 Q26 192 26 176Z" fill="#FBF7EE" stroke="#B08A3E" stroke-width="1.2"/><path d="M29 112 H91 V176 Q91 189 78 189 H42 Q29 189 29 176Z" fill="#D8BC7A" opacity=".75"/></svg>
+          <h3>Nōte I</h3><em>The safest reading</em><p>The truest, most faithful interpretation of your profile.</p>
+        </div>
+        <div class="vial">
+          <svg viewBox="0 0 120 200" aria-hidden="true"><rect x="44" y="6" width="32" height="26" fill="#B08A3E"/><rect x="38" y="32" width="44" height="10" fill="#8A6A2B"/><path d="M26 56 Q26 42 40 42 H80 Q94 42 94 56 V176 Q94 192 78 192 H42 Q26 192 26 176Z" fill="#FBF7EE" stroke="#B08A3E" stroke-width="1.2"/><path d="M29 82 H91 V176 Q91 189 78 189 H42 Q29 189 29 176Z" fill="#C9A24F" opacity=".8"/></svg>
+          <h3>Nōte II</h3><em>The expressive reading</em><p>Bolder, with more of your personality turned up.</p>
+        </div>
+        <div class="vial">
+          <svg viewBox="0 0 120 200" aria-hidden="true"><rect x="44" y="6" width="32" height="26" fill="#B08A3E"/><rect x="38" y="32" width="44" height="10" fill="#8A6A2B"/><path d="M26 56 Q26 42 40 42 H80 Q94 42 94 56 V176 Q94 192 78 192 H42 Q26 192 26 176Z" fill="#FBF7EE" stroke="#B08A3E" stroke-width="1.2"/><path d="M29 62 H91 V176 Q91 189 78 189 H42 Q29 189 29 176Z" fill="#8A6A2B" opacity=".75"/></svg>
+          <h3>Nōte III</h3><em>The unexpected reading</em><p>A surprise you did not know you wanted.</p>
+        </div>
+      </div>
+
+      <ol class="steps">
+        <li><span>1</span>Answer a short, personal scent journey online.</li>
+        <li><span>2</span>Receive three small samples, made for you.</li>
+        <li><span>3</span>Wear them and choose your Nōte.</li>
+        <li><span>4</span>Your formula is saved to your account. Order your bottle now or reorder any time.</li>
+      </ol>
+
+      <div class="product">
+        <div><h3>Your Nōte</h3><p>A 30 ml personalised eau de parfum, made from your chosen formula. Premium, personal, accessible luxury.</p></div>
+        <div><a href="#begin" class="btn">Begin your scent journey</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap">
+      <h2 class="rv">Who you are, who you love, what you remember.</h2>
+      <p class="lead rv" style="margin-inline:auto">Leave your email and be among the first to write your Nōte.</p>
+      <form class="wait" id="wait" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="email" name="email" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit">Join the list</button>
+      </form>
+      <p id="waitMsg" aria-live="polite"></p>
+    </div>
+  </section>
+</main>
+
+<footer><span>Nōte. Every memory leaves a Nōte.</span><span>Created by Kayla Mphofu and Daniel Blom</span></footer>
+
+<script>
+(function(){
+  var gate=document.getElementById('gate'),nav=document.getElementById('nav');
+  // drifting gold motes in the gate
+  var m=document.getElementById('motes');
+  for(var i=0;i<26;i++){var d=document.createElement('i');
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDuration=(7+Math.random()*9)+'s';
+    d.style.animationDelay=(Math.random()*8)+'s';
+    d.style.width=d.style.height=(2+Math.random()*3)+'px';
+    m.appendChild(d);}
+  // drifting memory phrases and phrase cycle
+  var ph=['after rain','the first summer','grandmother\u2019s kitchen','wedding morning','salt on skin','midnight in the city','old books','the drive home'];
+  ph.forEach(function(t,i){var w=document.createElement('span');w.className='w';w.textContent=t;
+    w.style.left=(4+(i*12.5)+Math.random()*5)+'%';w.style.animationDuration=(16+Math.random()*10)+'s';w.style.animationDelay=(i*1.7)+'s';m.appendChild(w)});
+  var cy=document.getElementById('cycle'),cp=['the smell of rain on warm pavement','your grandmother\u2019s kitchen','the morning of the wedding','salt on skin, last summer','the city at midnight'],ci=0;
+  function cycle(){cy.style.opacity=0;setTimeout(function(){cy.textContent=cp[ci++%cp.length];cy.style.opacity=1},700)}
+  cycle();setInterval(cycle,3400);
+  // enter
+  function enter(){
+    gate.classList.add('open');
+    document.body.classList.remove('locked');
+    setTimeout(function(){gate.classList.add('gone')},1800);
+  }
+  document.getElementById('enter').addEventListener('click',enter);
+  // nav state
+  addEventListener('scroll',function(){nav.classList.toggle('solid',scrollY>40)},{passive:true});
+  // who are we creating for
+  var paths=document.querySelectorAll('.path'),msg=document.getElementById('pathMsg');
+  paths.forEach(function(p){p.addEventListener('click',function(){
+    paths.forEach(function(x){x.classList.remove('on')});
+    p.classList.add('on');
+    msg.textContent=p.dataset.m+' The scent journey opens soon.';
+    try{sessionStorage.setItem('note_for',p.querySelector('h3').textContent)}catch(e){}
+  })});
+  // reveal headings
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  // waitlist
+  var f=document.getElementById('wait'),wm=document.getElementById('waitMsg');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    fetch(f.action,{method:'POST',body:new FormData(f),headers:{Accept:'application/json'}})
+      .then(function(r){wm.textContent=r.ok?'Thank you. We will write to you soon.':'Something went wrong. Please try again.';if(r.ok)f.reset()})
+      .catch(function(){wm.textContent='Something went wrong. Please try again.'});
+  });
+})();
+</script>
+</body>
+</html>
